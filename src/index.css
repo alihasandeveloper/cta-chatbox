@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* styles.css */
+.message-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.message-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.message-body::-webkit-scrollbar-thumb {
+    background-color: ;
+    border-radius: 10px;
+}
+
+.message-body::-webkit-scrollbar-thumb:hover {
+    background: #7c3aed;
+}
