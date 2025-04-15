@@ -6,7 +6,7 @@
 }
 
 .message-body::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #fff;
     border-radius: 10px;
 }
 
@@ -16,5 +16,5 @@
 }
 
 .message-body::-webkit-scrollbar-thumb:hover {
-    background: #7c3aed;
+    background: #fff;
 }

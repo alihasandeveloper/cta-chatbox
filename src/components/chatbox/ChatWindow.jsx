@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ChatHistory from './ChatHistory.jsx';
 import { IoIosSend } from 'react-icons/io';
 
@@ -8,6 +8,7 @@ const ChatWindow = () => {
     const [loading, setLoading] = useState(false);
     const [reply, setReply] = useState('');
 
+    // Fetch the initial reply from the backend
     useEffect(() => {
         fetch('http://development.local/wp-json/wai/v2/agent-chat')
             .then(res => res.json())
@@ -15,6 +16,15 @@ const ChatWindow = () => {
             .catch(err => console.error("Error fetching data:", err));
     }, []);
 
+    // Set the initial message only once
+    useEffect(() => {
+        const firstMessage = {
+            text: 'I am an AI agent. I am specialized in "bla bla". How can I help you?',
+            type: 'admin',
+            time: new Date()
+        };
+        setMessages([firstMessage]);
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -39,7 +49,6 @@ const ChatWindow = () => {
         }, 2000);
     };
 
-
     return (
         <div>
             <div className="rounded-lg h-[500px] w-[350px] shadow-xl border border-gray-100 fixed bottom-20 right-4 overflow-hidden flex flex-col justify-between">
@@ -56,7 +65,7 @@ const ChatWindow = () => {
                         className="flex w-full gap-2 h-full max-h-[50px]"
                         onSubmit={handleSubmit}
                     >
-                        <textarea
+                        <input
                             className="border border-black w-3/4 p-2 rounded resize-none"
                             placeholder="Type your message..."
                             required

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 const ChatHistory = ({ messages, loading }) => {
     const bottomRef = useRef(null);
-    console.log(messages);
+    // console.log(messages);
 
     useEffect(() => {
         if (bottomRef.current) {
@@ -13,13 +13,7 @@ const ChatHistory = ({ messages, loading }) => {
     return (
         <div className="max-w-md mx-auto p-4 space-y-4 overflow-y-auto">
             <div className="space-y-2">
-                <div>
-                    {messages.length <= 0 && (
-                        <p className="text-gray-700 font-bold text-[24px] leading-[28px] bg-gray-200 rounded-lg p-4">
-                            I am an AI agent, I am specialized in <span className="italic text-black">"bla bla"</span>. How can I help you?
-                        </p>
-                    )}
-                </div>
+
                 {messages.map((msg, index) => (
 
                     <div
