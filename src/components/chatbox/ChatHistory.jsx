@@ -18,7 +18,7 @@ const ChatHistory = ({messages, loading}) => {
                 >
                     <div
                         className={`relative px-4 py-3 rounded-2xl text-sm max-w-[80%] transition-all duration-200 break-words whitespace-pre-wrap ${
-                            msg.type === 'user' ? 'bg-gray-100 text-gray-900' : 'bg-gray-900 text-white'
+                            msg.type === 'user' ? 'bg-gray-100 text-black' : 'bg-gray-900 text-white'
                         }`}
                     >
                         <p>{msg.text}</p>

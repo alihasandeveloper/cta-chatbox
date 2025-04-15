@@ -60,17 +60,33 @@ const ChatWindow = () => {
 
     };
 
-    const handelImage = (e) => {
+    const handleImage = (e) => {
         const file = e.target.files[0];
-        setImage(file);
-    }
+        if (!file) return;
 
-    console.log(messages)
+        const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+        const maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (!allowedTypes.includes(file.type)) {
+            alert("Only JPG, JPEG, PNG, and WEBP files are allowed.");
+            return;
+        }
+
+        if (file.size > maxSize) {
+            alert("File size must be 2MB or less.");
+            return;
+        }
+
+        setImage(file);
+    };
+
+
+    console.log(image)
 
     return (
         <div>
             <div
-                className="rounded-lg h-[500px] w-[350px] shadow-xl border border-gray-100 fixed bottom-20 right-4 overflow-hidden flex flex-col justify-between">
+                className="rounded-3xl h-[500px] w-[350px] shadow-xl border border-gray-100 fixed bottom-20 right-4 overflow-hidden flex flex-col justify-between">
                 <div>
                     <h1 className="text-white bg-black py-2 text-xl text-center border-b border-gray-400">
                         Live Chat
@@ -80,7 +96,8 @@ const ChatWindow = () => {
                     <ChatHistory messages={messages} loading={loading}/>
                 </div>
                 <div>
-                    <ChatboxForm input={input} setInput={setInput} handleSubmit={handleSubmit} handelImage={handelImage}  image={image}  fileInputRef={fileInputRef} />
+                    <ChatboxForm input={input} setInput={setInput} handleSubmit={handleSubmit} handleImage={handleImage}
+                                 image={image} fileInputRef={fileInputRef}/>
                 </div>
             </div>
         </div>

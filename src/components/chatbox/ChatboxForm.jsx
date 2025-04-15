@@ -1,9 +1,9 @@
 import {IoIosSend} from "react-icons/io";
-import {CiImageOn} from "react-icons/ci";
-import {FaCirclePlus} from "react-icons/fa6";
+import { IoMdImage } from "react-icons/io";
 import {BsFillMicFill} from "react-icons/bs";
 
-const ChatboxForm = ({input, setInput, handleSubmit, handelImage, image, fileInputRef}) => {
+
+const ChatboxForm = ({input, setInput, handleSubmit, handleImage, image, fileInputRef}) => {
     return (
         <div className="flex p-4 border-t border-gray-200 flex-col ">
             {image && (
@@ -22,7 +22,7 @@ const ChatboxForm = ({input, setInput, handleSubmit, handelImage, image, fileInp
                     onClick={() => fileInputRef.current.click()}
                     className="text-black hover:text-gray-600  duration-200 ease transition-all"
                 >
-                    <FaCirclePlus size={20}/>
+                    <IoMdImage size={24}/>
                 </button>
 
                 <button
@@ -37,7 +37,7 @@ const ChatboxForm = ({input, setInput, handleSubmit, handelImage, image, fileInp
                     id="file_input"
                     type="file"
                     accept="image/*"
-                    onChange={handelImage}
+                    onChange={handleImage}
                     ref={fileInputRef}
                     className="hidden"
                 />
