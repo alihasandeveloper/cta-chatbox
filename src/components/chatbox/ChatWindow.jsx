@@ -1,13 +1,16 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { IoMdClose } from 'react-icons/io';
+import { IoIosArrowDown } from 'react-icons/io';
 import ChatHistory from './ChatHistory.jsx';
 import ChatboxForm from "./ChatboxForm.jsx";
 
-const ChatWindow = () => {
+const ChatWindow = ({showChatWindow}) => {
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [reply, setReply] = useState('');
     const [image, setImage] = useState(null);
+    const [isMinimized, setIsMinimized] = useState(false);
     const fileInputRef = useRef(null);
 
     // Fetch the initial reply from the backend
@@ -21,23 +24,25 @@ const ChatWindow = () => {
     // Set the initial message only once
     useEffect(() => {
         const firstMessage = {
-            text: 'I am an AI agent. I am specialized in "bla bla". How can I help you?',
+            text: 'Hello! I am your virtual assistant. How can I help you today?',
             type: 'admin',
             time: new Date(),
             file: '',
+            audioFile: null
         };
         setMessages([firstMessage]);
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e, audioBlob = null) => {
         e.preventDefault();
-        if (!input.trim()) return;
+        if (!input.trim() && !image && !audioBlob) return;
 
         const newMessages = [...messages, {
             text: input,
             type: 'user',
             time: new Date(),
-            file: image
+            file: image,
+            audioFile: audioBlob
         }];
         setMessages(newMessages);
         setInput('');
@@ -53,11 +58,11 @@ const ChatWindow = () => {
                 text: reply,
                 type: 'admin',
                 time: new Date(),
-                file: ''
+                file: '',
+                audioFile: null
             }]);
             setLoading(false);
         }, 2000);
-
     };
 
     const handleImage = (e) => {
@@ -80,26 +85,74 @@ const ChatWindow = () => {
         setImage(file);
     };
 
-
-    console.log(image)
-
     return (
         <div>
             <div
-                className="rounded-3xl h-[500px] w-[350px] shadow-xl border border-gray-100 fixed bottom-20 right-4 overflow-hidden flex flex-col justify-between">
-                <div>
-                    <h1 className="text-white bg-black py-2 text-xl text-center border-b border-gray-400">
-                        Live Chat
-                    </h1>
+                className={`rounded-3xl shadow-2xl border border-gray-200 fixed ${
+                    isMinimized ? 'h-16 bottom-20' : 'h-[500px]'
+                } right-4 bottom-20 w-[350px] overflow-hidden flex flex-col justify-between transition-all duration-300 ease-in-out`}
+                style={{ boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+            >
+                {/* Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                            <span className="text-xl font-bold">AI</span>
+                        </div>
+                        <div>
+                            <h1 className="font-semibold">AI Assistant</h1>
+                            <div className="text-xs flex items-center">
+                                <span className="w-2 h-2 bg-green-400 rounded-full inline-block mr-2"></span>
+                                Online
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex gap-1">
+                        <button
+                            onClick={() => setIsMinimized(!isMinimized)}
+                            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                        >
+                            <IoIosArrowDown size={18} className={`transform transition-transform ${isMinimized ? 'rotate-180' : ''}`} />
+                        </button>
+                        <button onClick={showChatWindow} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                            <IoMdClose size={18} />
+                        </button>
+                    </div>
                 </div>
-                <div className="flex-1 overflow-y-auto message-body">
-                    <ChatHistory messages={messages} loading={loading}/>
-                </div>
-                <div>
-                    <ChatboxForm input={input} setInput={setInput} handleSubmit={handleSubmit} handleImage={handleImage}
-                                 image={image} fileInputRef={fileInputRef}/>
-                </div>
+
+                {/* Chat body - only visible when not minimized */}
+                {!isMinimized && (
+                    <>
+                        <div className="flex-1 overflow-y-auto message-body">
+                            <ChatHistory messages={messages} loading={loading}/>
+                        </div>
+                        <div>
+                            <ChatboxForm
+                                input={input}
+                                setInput={setInput}
+                                handleSubmit={handleSubmit}
+                                handleImage={handleImage}
+                                image={image}
+                                fileInputRef={fileInputRef}
+                            />
+                        </div>
+                    </>
+                )}
             </div>
+
+            {/* Add some global styles for audio players */}
+            <style jsx global>{`
+                .audio-player-light::-webkit-media-controls-panel {
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
+                .audio-player-light::-webkit-media-controls-current-time-display,
+                .audio-player-light::-webkit-media-controls-time-remaining-display {
+                    color: white;
+                }
+                .audio-player-dark::-webkit-media-controls-panel {
+                    background-color: rgba(240, 240, 240, 0.8);
+                }
+            `}</style>
         </div>
     );
 };
