@@ -8,7 +8,6 @@ const ChatWindow = () => {
     const [loading, setLoading] = useState(false);
     const [reply, setReply] = useState('');
     const [image, setImage] = useState(null);
-    const [preview, setPreview] = useState(null);
     const fileInputRef = useRef(null);
 
     // Fetch the initial reply from the backend
@@ -64,11 +63,9 @@ const ChatWindow = () => {
     const handelImage = (e) => {
         const file = e.target.files[0];
         setImage(file);
-        setPreview(URL.createObjectURL(file));
     }
 
     console.log(messages)
-
 
     return (
         <div>
@@ -83,7 +80,7 @@ const ChatWindow = () => {
                     <ChatHistory messages={messages} loading={loading}/>
                 </div>
                 <div>
-                    <ChatboxForm input={input} setInput={setInput} handleSubmit={handleSubmit} handelImage={handelImage} preview={preview}   image={image} setPreview={setPreview} fileInputRef={fileInputRef} />
+                    <ChatboxForm input={input} setInput={setInput} handleSubmit={handleSubmit} handelImage={handelImage}  image={image}  fileInputRef={fileInputRef} />
                 </div>
             </div>
         </div>

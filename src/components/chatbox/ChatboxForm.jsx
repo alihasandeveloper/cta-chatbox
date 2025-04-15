@@ -1,44 +1,61 @@
 import {IoIosSend} from "react-icons/io";
-import { CiImageOn } from "react-icons/ci";
+import {CiImageOn} from "react-icons/ci";
+import {FaCirclePlus} from "react-icons/fa6";
+import {BsFillMicFill} from "react-icons/bs";
 
-
-const ChatboxForm = ({input, setInput, handleSubmit , handelImage , preview, image , fileInputRef}) => {
-
+const ChatboxForm = ({input, setInput, handleSubmit, handelImage, image, fileInputRef}) => {
     return (
-        <div className="flex p-4 border-t border-gray-200">
-            <form
-                className="w-full h-full"
-                onSubmit={handleSubmit}
-            >
-                <div className='mb-2'>
-                    <label className="block  text-sm font-medium text-gray-900 flex items-center gap-1"
-                           htmlFor="file_input">Upload file <CiImageOn size={20}/></label>
-                    <input
-                        className="focus:outline-none"
-                        id="file_input"
-                        type="file"
-                        accept="image/*"
-                        onChange={handelImage}
-                        ref={fileInputRef}
+        <div className="flex p-4 border-t border-gray-200 flex-col ">
+            {image && (
+                <div>
+                    <img
+                        src={URL.createObjectURL(image)}
+                        alt={image.name}
+                        className="w-12 h-12 mb-2 rounded "
                     />
                 </div>
-                <div className='flex w-full gap-2 h-full max-h-[50px]'>
-                    <input
-                        className="border border-black w-3/4 p-2 rounded resize-none"
-                        placeholder="Type your message..."
-                        required
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
+            )}
 
-                    />
-                    <button
-                        type="submit"
-                        className="w-1/4 cursor-pointer bg-black text-white rounded flex items-center justify-center"
-                    >
-                        <IoIosSend size={20}/>
-                    </button>
-                </div>
+            <form className="w-full flex items-center gap-2 " onSubmit={handleSubmit}>
+                <button
+                    type="button"
+                    onClick={() => fileInputRef.current.click()}
+                    className="text-black hover:text-gray-600  duration-200 ease transition-all"
+                >
+                    <FaCirclePlus size={20}/>
+                </button>
 
+                <button
+                    type="button"
+                    // onClick={() => fileInputRef.current.click()}
+                    className="text-black hover:text-gray-600  duration-200 ease transition-all"
+                >
+                    <BsFillMicFill size={20}/>
+                </button>
+
+                <input
+                    id="file_input"
+                    type="file"
+                    accept="image/*"
+                    onChange={handelImage}
+                    ref={fileInputRef}
+                    className="hidden"
+                />
+
+                <input
+                    className="flex-grow p-3 rounded-full placeholder-gray-600 border border-gray-300 focus:border-gray-700 focus:outline-none transition-all duration-200 ease-in-out"
+                    placeholder="Send Message"
+                    required
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                />
+
+                <button
+                    type="submit"
+                    className="text-white bg-black hover:bg-gray-600 p-3 rounded-full flex items-center justify-center hidden"
+                >
+                    <IoIosSend size={20}/>
+                </button>
             </form>
         </div>
     );

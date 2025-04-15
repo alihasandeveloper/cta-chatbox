@@ -27,7 +27,7 @@ const ChatHistory = ({messages, loading}) => {
                             <img
                                 src={URL.createObjectURL(msg.file)}
                                 alt={msg.text}
-                                className="mt-2 w-24 h-24 object-cover rounded-xl"
+                                className="mt-2 w-32 h-24 object-cover rounded-xl"
                             />
                         )}
 
