@@ -4,17 +4,9 @@ import { BsFillMicFill } from "react-icons/bs";
 import { FaStop } from "react-icons/fa";
 import { FaRegSmile } from "react-icons/fa";
 import { useState, useRef, useEffect } from "react";
+import emojiList from "../../assets/emoji.js";
 
 // Simple emoji list to use in the picker
-const emojiList = [
-    "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃",
-    "😉", "😊", "😇", "🥰", "😍", "😘", "😗", "😚", "😙", "😋",
-    "😛", "😜", "😝", "🤑", "🤗", "🤭", "🤫", "🤔", "🤐", "🤨",
-    "😐", "😑", "😶", "😏", "😒", "🙄", "😬", "🤥", "😌", "😔",
-    "😪", "🤤", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵",
-    "👍", "👎", "👏", "🙌", "👐", "🤲", "🤝", "🙏", "✌️", "🤘",
-    "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "💔", "❣️", "💕"
-];
 
 const ChatboxForm = ({ input, setInput, handleSubmit, handleImage, image, fileInputRef }) => {
     const [isRecording, setIsRecording] = useState(false);

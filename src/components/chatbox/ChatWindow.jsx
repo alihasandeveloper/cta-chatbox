@@ -85,6 +85,7 @@ const ChatWindow = ({showChatWindow}) => {
         setImage(file);
     };
 
+    console.log(messages);
     return (
         <div>
             <div
