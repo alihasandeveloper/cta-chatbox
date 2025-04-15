@@ -13,7 +13,7 @@ const Chatbox = () => {
     return (
         <div>
             {/*for development button onclick event disable // old hidden*/}
-            <div className={showChat ? 'block' : 'hidden'}>
+            <div className={showChat ? 'block' : 'block'}>
                 <ChatWindow/>
             </div>
             <button
