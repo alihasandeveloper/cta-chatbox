@@ -1,77 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 const VoiceForm = () => {
-    const [inputText, setInputText] = useState("");
-    const [isListening, setIsListening] = useState(false);
-    const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+    const [recording, setRecording] = useState(false);
+    const [audioURL, setAudioURL] = useState(null);
+    const mediaRecorderRef = useRef(null);
+    const audioChunksRef = useRef([]);
 
-    useEffect(() => {
-        if (!recognition) {
-            alert("Speech Recognition is not supported in this browser.");
-            return;
-        }
+    const startRecording = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorderRef.current = new MediaRecorder(stream);
+        audioChunksRef.current = [];
 
-        recognition.continuous = false;
-        recognition.lang = "en-US";
-        recognition.interimResults = false;
-
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            setInputText((prev) => prev + " " + transcript);
+        mediaRecorderRef.current.ondataavailable = (event) => {
+            audioChunksRef.current.push(event.data);
         };
 
-        recognition.onend = () => {
-            setIsListening(false);
+        mediaRecorderRef.current.onstop = () => {
+            const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+            const url = URL.createObjectURL(audioBlob);
+            setAudioURL(url);
         };
-    }, [recognition]);
 
-    const handleVoiceInput = () => {
-        if (isListening) {
-            recognition.stop();
-        } else {
-            setIsListening(true);
-            recognition.start();
-        }
+        mediaRecorderRef.current.start();
+        setRecording(true);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Submitted:", inputText);
-        alert("Form submitted with: " + inputText);
-        setInputText("");
+    const stopRecording = () => {
+        mediaRecorderRef.current.stop();
+        setRecording(false);
     };
+
+    console.log(audioURL);
 
     return (
-        <div className="p-4 max-w-md mx-auto">
-            <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-                <label className="text-lg font-medium">Say something or type:</label>
-                <div className="flex items-center space-x-2">
-                    <input
-                        type="text"
-                        value={inputText}
-                        onChange={(e) => setInputText(e.target.value)}
-                        className="flex-1 border px-3 py-2 rounded"
-                        placeholder="Type or speak here..."
-                    />
+        <div className="p-4 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
+            <h2 className="text-xl font-semibold text-center">🎤 Voice Recorder Form</h2>
+
+            <div className="text-center">
+                {!recording ? (
                     <button
-                        type="button"
-                        onClick={handleVoiceInput}
-                        className={`p-2 rounded-full ${
-                            isListening ? "bg-red-400" : "bg-green-400"
-                        }`}
+                        onClick={startRecording}
+                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                     >
-                        🎤
+                        Start Recording
                     </button>
+                ) : (
+                    <button
+                        onClick={stopRecording}
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    >
+                        Stop Recording
+                    </button>
+                )}
+            </div>
+
+            {audioURL && (
+                <div className="mt-4">
+                    <h4 className="text-md font-medium">Playback:</h4>
+                    <audio controls src={audioURL} className="w-full mt-2" />
                 </div>
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                >
-                    Submit
-                </button>
-            </form>
+            )}
         </div>
     );
 };
